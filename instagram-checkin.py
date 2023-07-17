@@ -1,5 +1,7 @@
 from instaloader import Instaloader, Profile
 from colorama import init, Fore
+from tqdm import tqdm
+import time
 
 # Initialize colorama
 init(autoreset=True)
@@ -7,14 +9,15 @@ init(autoreset=True)
 # Menu design
 menu_design = f"""
 {Fore.GREEN}╔══════════════════════════════════════╗
-{Fore.GREEN}║        Instagram Follower Checker      ║
+{Fore.GREEN}║       Instagram lbergage  v0.1       ║
 {Fore.GREEN}╠══════════════════════════════════════╣
-{Fore.GREEN}║                                        ║
-{Fore.GREEN}║     {Fore.CYAN}1. Check Followers                {Fore.GREEN}║
-{Fore.GREEN}║     {Fore.CYAN}2. Check Following                {Fore.GREEN}║
-{Fore.GREEN}║     {Fore.CYAN}3. Find Unfollowers               {Fore.GREEN}║
-{Fore.GREEN}║     {Fore.CYAN}4. Exit                            {Fore.GREEN}║
-{Fore.GREEN}║                                        ║
+{Fore.GREEN}║                                      ║
+{Fore.GREEN}║     {Fore.CYAN}1. Check Followers               {Fore.GREEN}║
+{Fore.GREEN}║     {Fore.CYAN}2. Check Following               {Fore.GREEN}║
+{Fore.GREEN}║     {Fore.CYAN}3. Find Unfollowers              {Fore.GREEN}║
+{Fore.GREEN}║     {Fore.CYAN}4. Exit                          {Fore.GREEN}║
+{Fore.GREEN}║     {Fore.CYAN}developed by MINADO              {Fore.GREEN}║
+{Fore.GREEN}║                                      ║
 {Fore.GREEN}╚══════════════════════════════════════╝
 """
 
@@ -60,10 +63,26 @@ def find_unfollowers(username, password):
 
         if unfollowers:
             print(f"{COLOR_UNFOLLOWERS}Users you follow but who don't follow you back:")
-            for user in unfollowers:
-                print(f"{COLOR_UNFOLLOWERS}{user.username} - did not follow you back")
+            for user in tqdm(unfollowers, ncols=80):
+                time.sleep(0.1)  # Simulate some work
+                print(f"{COLOR_UNFOLLOWERS}{user.username}" - "Did not follow you back")
         else:
-            print(f"{COLOR_UNFOLLOWERS}No users found.")
+            print(f"{COLOR_UNFOLLOWERS} No users found.")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+
+def count_following(username, password):
+    try:
+        loader = Instaloader()
+        loader.login(username, password)  # Login using the Instagram account
+
+        profile = Profile.from_username(loader.context, username)
+
+        following_count = profile.followees
+
+        print(f"{COLOR_FOLLOWING}Your Following: {following_count}")
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
@@ -72,22 +91,20 @@ def find_unfollowers(username, password):
 def main():
     clear_screen()
     print(menu_design)
+    print("If your account has 2FA enabled, please disable it to avoid issues")
+    username = input("Enter your Instagram username: ")
+    password = input("Enter your Instagram password: ")
+
     while True:
         choice = input("Enter your choice (1-4): ")
         if choice == "1":
             clear_screen()
-            username = input("Enter your Instagram username: ")
-            password = input("Enter your Instagram password: ")
             count_followers(username, password)
         elif choice == "2":
             clear_screen()
-            username = input("Enter your Instagram username: ")
-            password = input("Enter your Instagram password: ")
             count_following(username, password)
         elif choice == "3":
             clear_screen()
-            username = input("Enter your Instagram username: ")
-            password = input("Enter your Instagram password: ")
             find_unfollowers(username, password)
         elif choice == "4":
             print("Exiting...")
