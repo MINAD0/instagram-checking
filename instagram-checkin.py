@@ -32,6 +32,19 @@ def clear_screen():
     print("\033c", end="")
 
 
+def read_account_info(file_path):
+    with open(file_path, "r") as file:
+        lines = file.readlines()
+        username = lines[0].strip()
+        password = lines[1].strip()
+    return username, password
+
+
+# Usage example
+file_path = "account.txt"
+username, password = read_account_info(file_path)
+
+
 def count_followers(username, password):
     try:
         loader = Instaloader()
@@ -65,9 +78,9 @@ def find_unfollowers(username, password):
             print(f"{COLOR_UNFOLLOWERS}Users you follow but who don't follow you back:")
             for user in tqdm(unfollowers, ncols=80):
                 time.sleep(0.1)  # Simulate some work
-                print(f"{COLOR_UNFOLLOWERS}{user.username}" - "Did not follow you back")
+                print(f"{COLOR_UNFOLLOWERS}{user.username} - Did not follow you back")
         else:
-            print(f"{COLOR_UNFOLLOWERS} No users found.")
+            print(f"{COLOR_UNFOLLOWERS}No users found.")
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
@@ -92,9 +105,6 @@ def main():
     clear_screen()
     print(menu_design)
     print("If your account has 2FA enabled, please disable it to avoid issues")
-    username = input("Enter your Instagram username: ")
-    password = input("Enter your Instagram password: ")
-
     while True:
         choice = input("Enter your choice (1-4): ")
         if choice == "1":

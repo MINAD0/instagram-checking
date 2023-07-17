@@ -13,8 +13,9 @@ This Python script allows you to check the number of followers and following on 
 1. Clone the repository or download the script file (`instagram_checker.py`).
 2. Install the required libraries by running `pip install instaloader colorama tqdm` or `pip install -r requirements.txt` in your terminal.
 3. Run the script using Python: `python instagram_checker.py`.
-4. Follow the on-screen instructions and input the required information.
-5. The script will display the number of followers and following, and the users you follow but who don't follow you back.
+4. Go to account.txt and add your username and password there .
+5. Follow the on-screen instructions and input the required information.
+6. The script will display the number of followers and following, and the users you follow but who don't follow you back.
 
 ## Features
 
