@@ -63,7 +63,38 @@ def count_followers(username, password):
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
+def count_following(username, password):
+    try:
+        loader = Instaloader()
+        loader.login(username, password)  # Login using the Instagram account
 
+        profile = Profile.from_username(loader.context, username)
+
+        following_count = profile.followees
+
+        print(f"{COLOR_FOLLOWING}Your Following: {following_count}")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+def unfollow_unfollowers(username, password, unfollowers):
+    try:
+        if unfollowers:
+            # Create a client instance and login
+            api = Client(username, password)
+            api.login()
+
+            # Unfollow each unfollower
+            for user in unfollowers:
+                api.friendships_destroy(user.userid)
+                print(f"{Fore.GREEN}Unfollowed user: {user.username}")
+
+            print(f"{Fore.GREEN}Unfollowed all unfollowers successfully.")
+        else:
+            print(f"{COLOR_UNFOLLOWERS}No users found.")
+
+    except Exception as e:
+        print(f"{COLOR_UNFOLLOWERS}An error occurred: {str(e)}")
 
 def find_unfollowers(username, password):
     try:
@@ -83,27 +114,19 @@ def find_unfollowers(username, password):
                 time.sleep(0.1)  # Simulate some work
                 print(f"{COLOR_UNFOLLOWERS}{user.username} - Did not follow you back")
 
+            try:
+                # Ask user if they want to unfollow the users
+                choice = input("Do you want to unfollow these users? (y/n): ")
+                if choice.lower() == 'y':
+                        unfollow_unfollowers(username, password, unfollowers)
+            except Exception as e:
+                print(f"{COLOR_UNFOLLOWERS}An error occurred: {str(e)}")
         else:
             print(f"{COLOR_UNFOLLOWERS}No users found.")
 
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
-
-
-def count_following(username, password):
-    try:
-        loader = Instaloader()
-        loader.login(username, password)  # Login using the Instagram account
-
-        profile = Profile.from_username(loader.context, username)
-
-        following_count = profile.followees
-
-        print(f"{COLOR_FOLLOWING}Your Following: {following_count}")
-
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
 
 def unfollow_all_users(username, password):
     try:
@@ -118,12 +141,12 @@ def unfollow_all_users(username, password):
         # Unfollow each user
         for user in following['users']:
             api.friendships_destroy(user['pk'])
-            print(f"{COLOR_SUCCESS}Unfollowed user: {user['username']}")
+            print(f"{COLOR_FOLLOWERS}Unfollowed user: {user['username']}")
 
-        print(f"{COLOR_SUCCESS}Unfollowed all users successfully.")
+        print(f"{COLOR_FOLLOWERS}Unfollowed all users successfully.")
 
     except Exception as e:
-        print(f"{COLOR_ERROR}An error occurred: {str(e)}")
+        print(f"{COLOR_UNFOLLOWERS}An error occurred: {str(e)}")
 
 
 
